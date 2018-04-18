@@ -29,7 +29,7 @@ load_kernel:
 
     ; Read from disk and store in 0x1000
     mov bx, KERNEL_OFFSET
-    mov dh, 2
+    mov dh, 16 ; The kernel must fit in however many sectors we load - otherwise we get really weird bugs.
     mov dl, [BOOT_DRIVE]
     call disk_load
     ret
