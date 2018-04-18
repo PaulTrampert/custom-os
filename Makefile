@@ -11,7 +11,7 @@ LD = /usr/local/i386elfgcc/bin/i386-elf-ld
 GDB = /usr/local/i386elfgcc/bin/i386-elf-gdb
 
 # -g: Use debugging symbols in gcc
-CFLAGS = -g
+CFLAGS = -g -ffreestanding -Wall -Wextra -fno-exceptions -m32
 
 
 # First rule is the one executed when no parameters are fed to the Makefile
@@ -34,7 +34,7 @@ debug: os-image.bin kernel.elf
 # Generic rules for wildcards
 # To make an object, always compile it from its .c
 %.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) -ffreestanding -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 %.o: %.asm
 	nasm $< -f elf -o $@
