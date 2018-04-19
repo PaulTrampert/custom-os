@@ -1,14 +1,14 @@
 #include <stdint.h>
 #include "timer.h"
-#include "../kernel/util.h"
-#include "../drivers/screen.h"
-#include "../drivers/ports.h"
+#include "ports.h"
 #include "isr.h"
+#include "../libc/unused.h"
 
 uint32_t ticks = 0;
 
 static void timer_callback(registers_t *r) {
   ticks++;
+  UNUSED(r);
 }
 
 void init_timer(uint8_t freq) {
