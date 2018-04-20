@@ -1,4 +1,25 @@
+#include <stdint.h>
 #include "strings.h"
+
+void hex_to_ascii(int n, char str[]) {
+    append(str, '0');
+    append(str, 'x');
+    char zeros = 0;
+
+    int32_t tmp;
+    int i;
+    for (i = 28; i > 0; i -= 4) {
+        tmp = (n >> i) & 0xF;
+        if (tmp == 0 && zeros == 0) continue;
+        zeros = 1;
+        if (tmp >= 0xA) append(str, tmp - 0xA + 'a');
+        else append(str, tmp + '0');
+    }
+
+    tmp = n & 0xF;
+    if (tmp >= 0xA) append(str, tmp - 0xA + 'a');
+    else append(str, tmp + '0');
+}
 
 void int_to_ascii(int n, char str[]) {
     int i, sign;
@@ -27,4 +48,10 @@ void reverse(char str[]) {
         str[i] = str[j];
         str[j] = c;
     }
+}
+
+void append(char str[], char n) {
+  int len = strlen(str);
+  str[len] = n;
+  str[len+1] = '\0';
 }

@@ -1,6 +1,7 @@
 #include "../drivers/screen.h"
 #include "../cpu/isr.h"
 #include "../cpu/timer.h"
+#include "../drivers/keyboard.h"
 
 void kernel_main() {
     clear_screen();
@@ -9,4 +10,5 @@ void kernel_main() {
 
     asm volatile("sti");
     init_timer(50);
+    init_keyboard();
 }
