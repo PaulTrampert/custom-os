@@ -14,7 +14,7 @@
 #define SCD_NINE 0x0A
 #define SCD_ZERO 0x0B
 #define SCD_MINUS 0x0C
-#define SCD_PLUS 0x0D
+#define SCD_EQUALS 0x0D
 #define SCD_BACKSPACE 0x0E
 #define SCD_TAB 0x0F
 #define SCD_Q 0x10
