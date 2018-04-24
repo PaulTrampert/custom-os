@@ -14,7 +14,6 @@ void kernel_main() {
     init_keyboard();
     kprintln("Starting shell...");
     init_shell();
-    kprintln("Welcome to POS (Paul's OS)");
     asm volatile("sti");
 }
 

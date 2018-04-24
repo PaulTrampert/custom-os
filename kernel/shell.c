@@ -17,7 +17,7 @@ static bool numLock = false;
 #define TO_LOWER_CASE(c) (c + 0x20)
 #define TO_UPPER_CASE(c) (c - 0x20)
 #define IS_ALPHA(c) (IS_UPPER_CASE(c) || IS_LOWER_CASE(c))
-#define BUFFER_SIZE 80
+#define BUFFER_SIZE 256
 
 uint8_t buffer[BUFFER_SIZE];
 uint8_t bufferOffset = 0;
@@ -63,12 +63,16 @@ static void handle_enter(){
     kprintln("Goodbye!");
     asm volatile("hlt");
   }
+  if (strcompare(buffer, "clr") == 0) {
+    clear_screen();
+  }
   else {
     kprint(buffer);
     kprintln(" is not a recognized command or program.");
   }
   memory_set(buffer, 0, BUFFER_SIZE);
   bufferOffset = 0;
+  kprint(">");
 }
 
 static void handle_backspace() {
@@ -240,4 +244,7 @@ void init_shell() {
   shift_ascii_tbl[KCD_BSLASH] = '|';
   shift_ascii_tbl[KCD_CLS_BRKT] = '}';
   shift_ascii_tbl[KCD_TILDE] = '~';
+
+  kprintln("Welcome to POS");
+  kprint(">");
 }
