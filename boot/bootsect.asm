@@ -1,10 +1,14 @@
 [org 0x7c00] ; bootloader offset
 KERNEL_OFFSET equ 0x1000 ; The address used when linking
+MEMORY_MAP equ 0x7E00
 
     mov [BOOT_DRIVE], dl ; BIOS gives us the boot drive in 'dl' on boot
     mov bp, 0x9000 ; set the stack
     mov sp, bp
 
+    mov ax, MEMORY_MAP
+    mov [es:di], ax
+    call detect_ram
     call load_kernel   ; read the kernel from disk
     call switch_to_pm  ; disable interrupts, load GDT, etc. Finally jumps to BEGIN_PM
     jmp $ ; this should never be called
@@ -14,6 +18,7 @@ KERNEL_OFFSET equ 0x1000 ; The address used when linking
 %include "boot/boot_sect_disk.asm"
 %include "boot/32bit-gdt.asm"
 %include "boot/32bit-switch.asm"
+%include "boot/detect_ram.asm"
 
 [bits 16]
 load_kernel:
