@@ -48,6 +48,14 @@ void kprintln(char *message) {
     kprint("\n");
 }
 
+void kbackspace() {
+    int offset = get_cursor_offset() - 2;
+    int col = get_offset_col(offset);
+    int row = get_offset_row(offset);
+    print_char('\0', col, row, WHITE_ON_BLACK);
+    set_cursor_offset(offset);
+}
+
 
 /**********************************************************
  * Private kernel functions                               *
