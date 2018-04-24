@@ -1,6 +1,8 @@
 {
   "files.associations": {
     "screen.h": "c",
-    "scancodes.h": "c"
+    "scancodes.h": "c",
+    "keyboard.h": "c",
+    "timer.h": "c"
   }
 }

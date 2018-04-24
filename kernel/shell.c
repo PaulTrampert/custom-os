@@ -19,7 +19,7 @@ static bool numLock = false;
 #define IS_ALPHA(c) (IS_UPPER_CASE(c) || IS_LOWER_CASE(c))
 #define BUFFER_SIZE 256
 
-uint8_t buffer[BUFFER_SIZE];
+char buffer[BUFFER_SIZE];
 uint8_t bufferOffset = 0;
 
 static bool is_numlock_affected(uint8_t keycode) {
@@ -32,7 +32,7 @@ static bool is_numlock_affected(uint8_t keycode) {
 }
 
 static void handle_standard_key(kbd_event_t *event) {
-  uint8_t c = 0;
+  char c = 0;
   if (
     IS_SHIFT_DOWN || 
     (numLock && is_numlock_affected(event->keycode))
@@ -42,7 +42,9 @@ static void handle_standard_key(kbd_event_t *event) {
   else {
     c = ascii_tbl[event->keycode];
   }
+#pragma GCC diagnostic ignored "-Wtype-limits"
   if (c && bufferOffset < BUFFER_SIZE) {
+#pragma GCC diagnostic pop
     if (capsLock && IS_ALPHA(c)) {
       if (IS_UPPER_CASE(c)) {
         c = TO_LOWER_CASE(c);
@@ -51,7 +53,7 @@ static void handle_standard_key(kbd_event_t *event) {
         c = TO_UPPER_CASE(c);
       }
     }
-    uint8_t str[2] = {c, 0};
+    char str[2] = {c, 0};
     buffer[bufferOffset++] = c;
     kprint(str);
   }
@@ -70,7 +72,7 @@ static void handle_enter(){
     kprint(buffer);
     kprintln(" is not a recognized command or program.");
   }
-  memory_set(buffer, 0, BUFFER_SIZE);
+  memory_set((uint8_t *)buffer, 0, BUFFER_SIZE);
   bufferOffset = 0;
   kprint(">");
 }
@@ -123,7 +125,7 @@ void handle_key_up(kbd_event_t *event) {
 }
 
 void init_shell() {
-  memory_set(buffer, 0, BUFFER_SIZE);
+  memory_set((uint8_t *)buffer, 0, BUFFER_SIZE);
   // Init base ascii table
   memory_set(ascii_tbl, 0, 256);
   ascii_tbl[KCD_TAB] = '\t';

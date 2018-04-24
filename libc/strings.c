@@ -57,7 +57,7 @@ void append(char str[], char n) {
   str[len+1] = '\0';
 }
 
-int strcompare(uint8_t str1[], uint8_t str2[]) {
+int strcompare(char str1[], char str2[]) {
     int i;
     int strlen1 = strlen(str1);
     int strlen2 = strlen(str2);
