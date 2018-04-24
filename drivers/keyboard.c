@@ -6,10 +6,10 @@
 #include "../libc/strings.h"
 #include "../libc/mem.h"
 #include "scancodes.h"
+#include "../kernel/shell.h"
 
 static uint8_t escaped = 0;
 static uint8_t scd_buffer[] = {'\0', '\0', '\0', '\0'};
-static bool keystates[256];
 
 static void keyboard_callback(registers_t *r) {
   uint8_t scancode = 0;
@@ -26,7 +26,12 @@ static void keyboard_callback(registers_t *r) {
     .scancode = scd_buffer,
     .keycode = scd_to_kcd(scd_buffer, strlen(scd_buffer)),
   };
-  
+  if (SCD_IS_RELEASE(scancode)) {
+    handle_key_up(&event);
+  }
+  else {
+    handle_key_down(&event);
+  }
   memory_set(scd_buffer, 0, 4);
   UNUSED(r);
 }
@@ -48,29 +53,6 @@ static void us_std_kbd(){
   esc_scd_tbl[0x51] = KCD_PGDN;
   esc_scd_tbl[0x52] = KCD_INSERT;
   esc_scd_tbl[0x53] = KCD_DEL;
-
-  memory_set(ascii_tbl, (uint8_t)0, 256);
-  ascii_tbl[KCD_TAB] = '\t';
-  ascii_tbl[KCD_ENTER] = '\n';
-  ascii_tbl[KCD_SPACE] = ' ';
-  ascii_tbl[KCD_QUOTE] = '\'';
-  ascii_tbl[KCD_TILDE] = '`';
-  ascii_tbl[KCD_MINUS] = '-';
-  ascii_tbl[KCD_PERIOD] = '.';
-  ascii_tbl[KCD_FSLASH] = '/';
-  ascii_tbl[KCD_ZERO] = '0';
-  ascii_tbl[KCD_ONE] = '1';
-  ascii_tbl[KCD_TWO] = '2';
-  ascii_tbl[KCD_THREE] = '3';
-  ascii_tbl[KCD_FOUR] = '4';
-  ascii_tbl[KCD_FIVE] = '5';
-  ascii_tbl[KCD_SIX] = '6';
-  ascii_tbl[KCD_SEVEN] = '7';
-  ascii_tbl[KCD_EIGHT] = '8';
-  ascii_tbl[KCD_NINE] = '9';
-  ascii_tbl[KCD_SEMICLN] = ';';
-  ascii_tbl[KCD_EQUALS] = '=';
-  
 }
 
 void init_keyboard() {
