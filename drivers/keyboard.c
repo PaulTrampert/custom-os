@@ -17,14 +17,17 @@ static void keyboard_callback(registers_t *r) {
   if (scancode == SCD_ESCAPE_CODE || scancode == SCD_ESCAPE_CODE2) {
     escaped = (scancode + 1) - 0xE0;
   }
-  append(scd_buffer, scancode);
+  append((char *)scd_buffer, scancode);
   if (escaped) {
     escaped--;
     return;
   }
   kbd_event_t event = {
-    .scancode = scd_buffer,
-    .keycode = scd_to_kcd(scd_buffer, strlen(scd_buffer)),
+    .scancode[0] = scd_buffer[0],
+    .scancode[1] = scd_buffer[1],
+    .scancode[2] = scd_buffer[2],
+    .scancode[3] = scd_buffer[3],
+    .keycode = scd_to_kcd(scd_buffer, strlen((char *)scd_buffer)),
   };
   if (SCD_IS_RELEASE(scancode)) {
     handle_key_up(&event);

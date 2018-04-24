@@ -1,4 +1,4 @@
 #pragma once
 #include <stdint.h>
 
-void set_timer(uint32_t freq);
+void init_timer(uint8_t freq);
