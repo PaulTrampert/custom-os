@@ -6,12 +6,15 @@
 
 void kernel_main() {
     clear_screen();
-    kprintln("Installing ISR's");
+    kprintln("Installing ISR's...");
     isr_install();
-
-    asm volatile("sti");
-    init_shell();
+    kprintln("Initializing timer...");
     init_timer(50);
+    kprintln("Initializing keyboard driver...");
     init_keyboard();
+    kprintln("Starting shell...");
+    init_shell();
+    kprintln("Welcome to POS (Paul's OS)");
+    asm volatile("sti");
 }
 

@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdbool.h>
 #include "strings.h"
 
 void hex_to_ascii(int n, char str[]) {
@@ -54,4 +55,25 @@ void append(char str[], char n) {
   int len = strlen(str);
   str[len] = n;
   str[len+1] = '\0';
+}
+
+int strcompare(uint8_t str1[], uint8_t str2[]) {
+    int i;
+    int strlen1 = strlen(str1);
+    int strlen2 = strlen(str2);
+    for (i = 0; i < strlen1 && i < strlen2; i++) {
+        if (str1[i] < str2[i]) {
+            return -1;
+        }
+        if (str1[i] > str2[i]) {
+            return 1;
+        }
+    }
+    if (strlen1 < strlen2) {
+        return -1;
+    }
+    if (strlen1 > strlen2) {
+        return 1;
+    }
+    return 0;
 }

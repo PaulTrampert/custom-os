@@ -4,6 +4,7 @@
 #include "shell.h"
 #include <stdbool.h>
 #include "../drivers/screen.h"
+#include "../libc/strings.h"
 
 static bool isLShiftDown = false;
 static bool isRShiftDown = false;
@@ -16,6 +17,10 @@ static bool numLock = false;
 #define TO_LOWER_CASE(c) (c + 0x20)
 #define TO_UPPER_CASE(c) (c - 0x20)
 #define IS_ALPHA(c) (IS_UPPER_CASE(c) || IS_LOWER_CASE(c))
+#define BUFFER_SIZE 80
+
+uint8_t buffer[BUFFER_SIZE];
+uint8_t bufferOffset = 0;
 
 static bool is_numlock_affected(uint8_t keycode) {
   return (
@@ -37,7 +42,7 @@ static void handle_standard_key(kbd_event_t *event) {
   else {
     c = ascii_tbl[event->keycode];
   }
-  if (c) {
+  if (c && bufferOffset < BUFFER_SIZE) {
     if (capsLock && IS_ALPHA(c)) {
       if (IS_UPPER_CASE(c)) {
         c = TO_LOWER_CASE(c);
@@ -47,7 +52,29 @@ static void handle_standard_key(kbd_event_t *event) {
       }
     }
     uint8_t str[2] = {c, 0};
+    buffer[bufferOffset++] = c;
     kprint(str);
+  }
+}
+
+static void handle_enter(){
+  kprint("\n");
+  if (strcompare(buffer, "end") == 0) {
+    kprintln("Goodbye!");
+    asm volatile("hlt");
+  }
+  else {
+    kprint(buffer);
+    kprintln(" is not a recognized command or program.");
+  }
+  memory_set(buffer, 0, BUFFER_SIZE);
+  bufferOffset = 0;
+}
+
+static void handle_backspace() {
+  if (bufferOffset) {
+    kbackspace();
+    buffer[--bufferOffset] = 0;
   }
 }
 
@@ -65,6 +92,12 @@ void handle_key_down(kbd_event_t *event) {
       case KCD_RSHIFT:
         isRShiftDown = true;
         break;
+      case KCD_BACKSPACE:
+        handle_backspace();
+        break;
+      case KCD_ENTER:
+      case KCD_KPDENTER:
+        handle_enter();
       case KCD_TAB:
         break;
       default:
@@ -86,6 +119,7 @@ void handle_key_up(kbd_event_t *event) {
 }
 
 void init_shell() {
+  memory_set(buffer, 0, BUFFER_SIZE);
   // Init base ascii table
   memory_set(ascii_tbl, 0, 256);
   ascii_tbl[KCD_TAB] = '\t';
