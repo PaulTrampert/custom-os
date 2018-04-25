@@ -1,15 +1,13 @@
 [org 0x7c00] ; bootloader offset
 KERNEL_OFFSET equ 0x1000 ; The address used when linking
-MEMORY_MAP equ 0x7E00
+MEMORY_MAP equ 0x0500
 
     mov [BOOT_DRIVE], dl ; BIOS gives us the boot drive in 'dl' on boot
 
     mov bp, 0x9000 ; set the stack
     mov sp, bp
 
-    mov ax, MEMORY_MAP
-    mov es, ax
-    xor di, di
+    mov di, MEMORY_MAP
     call detect_ram
     call load_kernel   ; read the kernel from disk
     call switch_to_pm  ; disable interrupts, load GDT, etc. Finally jumps to BEGIN_PM
@@ -25,8 +23,6 @@ MEMORY_MAP equ 0x7E00
 [bits 16]
 load_kernel:
     ; Read from disk and store in 0x1000
-    xor ax, ax
-    mov es, ax
     mov bx, KERNEL_OFFSET
     mov dh, 31 ; The kernel must fit in however many sectors we load - otherwise we get really weird bugs.
     mov dl, [BOOT_DRIVE]
