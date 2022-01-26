@@ -6,6 +6,8 @@
 #include "../drivers/screen.h"
 #include "../libc/strings.h"
 
+uint8_t shift_ascii_tbl[256];
+
 static bool isLShiftDown = false;
 static bool isRShiftDown = false;
 static bool capsLock = false;

@@ -1,7 +1,6 @@
 #include "keyboard.h"
 #include "../cpu/ports.h"
 #include "../cpu/isr.h"
-#include "screen.h"
 #include "../libc/unused.h"
 #include "../libc/strings.h"
 #include "../libc/mem.h"

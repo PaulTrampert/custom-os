@@ -207,6 +207,6 @@
 
 uint8_t scd_to_kcd(uint8_t scd[], uint8_t length);
 
-uint8_t esc_scd_tbl[256];
+extern uint8_t esc_scd_tbl[256];
 
-uint8_t ascii_tbl[256];
+extern uint8_t ascii_tbl[256];
