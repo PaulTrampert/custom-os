@@ -3,12 +3,14 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # apt-get install nasm qemu texinfo
 
-mkdir -p /tmp/src
-cd /tmp/src || exit
 
-PREFIX="/usr/local/i386elfgcc"
+PREFIX="$DIR/i386elfgcc"
+SRC_DIR="$DIR/tmp/src"
 TARGET=i386-elf
 PATH="$PREFIX/bin:$PATH"
+
+mkdir -p "$SRC_DIR"
+cd "$SRC_DIR" || exit
 
 # binutils
 BINUTILS_VERSION=2.37
@@ -43,8 +45,6 @@ curl -O http://ftp.gnu.org/gnu/gdb/gdb-$GDB_VERSION.tar.gz
 tar xzf gdb-$GDB_VERSION.tar.gz
 mkdir gdb-build
 cd gdb-build || exit
-export PREFIX="/usr/local/i386elfgcc"
-export TARGET=i386-elf
 ../gdb-$GDB_VERSION/configure --target="$TARGET" --prefix="$PREFIX" --program-prefix=i386-elf-
 make
 make install

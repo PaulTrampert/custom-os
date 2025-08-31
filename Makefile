@@ -6,9 +6,9 @@ HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h libc/*.h)
 # File extension replacement
 OBJ = $(C_SOURCES:.c=.o cpu/interrupt.o)
 
-CC = /usr/local/i386elfgcc/bin/i386-elf-gcc
-LD = /usr/local/i386elfgcc/bin/i386-elf-ld
-GDB = /usr/local/i386elfgcc/bin/i386-elf-gdb
+CC = ./i386elfgcc/bin/i386-elf-gcc
+LD = ./i386elfgcc/bin/i386-elf-ld
+GDB = ./i386elfgcc/bin/i386-elf-gdb
 
 # -g: Use debugging symbols in gcc
 CFLAGS = -g -ffreestanding -Wall -Wextra -fno-exceptions -m32
