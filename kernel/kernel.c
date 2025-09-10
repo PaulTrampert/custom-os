@@ -18,5 +18,6 @@ void kernel_main(mmap_entry_t *mmap_location, uint32_t mmap_count) {
     kprintln("Starting shell...");
     init_shell();
     asm volatile("sti");
+    asm volatile("hlt");
 }
 
